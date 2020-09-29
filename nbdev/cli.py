@@ -15,6 +15,10 @@ from .conda import *
 from fastscript import call_parse,Param,bool_arg
 from subprocess import check_output,STDOUT
 
+from html.parser import HTMLParser
+from nbconvert.preprocessors import ExecutePreprocessor, Preprocessor
+from nbconvert import HTMLExporter,MarkdownExporter
+
 # Cell
 import re,nbformat
 from .export import _mk_flag_re, _re_all_def
@@ -218,7 +222,7 @@ def nbdev_build_docs(fname:Param("A notebook name or glob to convert", str)=None
                      n_workers:Param("Number of workers to use", int)=None,
                      pause:Param("Pause time (in secs) between notebooks to avoid race conditions", float)=0.2):
     "Build the documentation by converting notebooks mathing `fname` to html"
-    notebook2html(fname=fname, force_all=force_all, n_workers=n_workers, pause=pause)
+    notebook2html(fname=fname, force_all=force_all, n_workers=n_workers, pause=pause, cls=MarkdownExporter, template_file='md.tpl')
     if fname is None: make_sidebar()
     if mk_readme: make_readme()
 
